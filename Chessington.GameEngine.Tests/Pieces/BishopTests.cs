@@ -1,13 +1,20 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using Chessington.GameEngine.Pieces;
+using FluentAssertions;
+using NUnit.Framework;
 
 namespace Chessington.GameEngine.Tests.Pieces
 {
     [TestFixture]
     public class BishopTests
     {
+        [Test]
+        public void Bishop_CanMove_Diagonally()
+        {
+            var board = new Board();
+            var bishop = new Bishop(Player.White);
+            board.AddPiece(Square.At(4, 4), bishop);
 
-<<<<<<< HEAD
-=======
             var moves = bishop.GetAvailableMoves(board);
 
             var expectedMoves = new List<Square>();
@@ -25,33 +32,5 @@ namespace Chessington.GameEngine.Tests.Pieces
 
             moves.ShouldAllBeEquivalentTo(expectedMoves);
         }
-
-        [Test]
-        public void Bishop_CannnotPassThrough_OpposingPieces()
-        {
-            var board = new Board();
-            var bishop = new Bishop(Player.White);
-            board.AddPiece(Square.At(4, 4), bishop);
-            var pieceToTake = new Pawn(Player.Black);
-            board.AddPiece(Square.At(6, 6), pieceToTake);
-
-            var moves = bishop.GetAvailableMoves(board);
-            moves.Should().NotContain(Square.At(7, 7));
-        }
-
-        [Test]
-        public void Bishop_CannnotPassThrough_FriendlyPieces()
-        {
-            var board = new Board();
-            var bishop = new Bishop(Player.White);
-            board.AddPiece(Square.At(4, 4), bishop);
-            var friendlyPiece = new Pawn(Player.White);
-            board.AddPiece(Square.At(6, 6), friendlyPiece);
-
-            var moves = bishop.GetAvailableMoves(board);
-            moves.Should().NotContain(Square.At(7, 7));
-        }
->>>>>>> 9ece984 (Prevent Bishops from moving through other pieces)
     }
-
 }
