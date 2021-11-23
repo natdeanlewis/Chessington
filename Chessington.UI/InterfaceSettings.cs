@@ -3,7 +3,7 @@ using System.Windows.Media;
 namespace Chessington.UI
 {
     /// <summary>
-    /// Holds application-level settings for the user interface.
+    ///     Holds application-level settings for the user interface.
     /// </summary>
     public static class InterfaceSettings
     {

@@ -2,209 +2,209 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
 #if NETFX_CORE && !WinRT
 #define WinRT
 #endif
 
-namespace Chessington.UI.Caliburn.Micro {
+namespace Chessington.UI.Caliburn.Micro
+{
     /// <summary>
-    ///   A marker interface for classes that subscribe to messages.
+    ///     A marker interface for classes that subscribe to messages.
     /// </summary>
-    public interface IHandle { }
+    public interface IHandle
+    {
+    }
 
     /// <summary>
-    ///   Denotes a class which can handle a particular type of message.
+    ///     Denotes a class which can handle a particular type of message.
     /// </summary>
-    /// <typeparam name = "TMessage">The type of message to handle.</typeparam>
-    public interface IHandle<TMessage> : IHandle {  //don't use contravariance here
+    /// <typeparam name="TMessage">The type of message to handle.</typeparam>
+    public interface IHandle<TMessage> : IHandle
+    {
+        //don't use contravariance here
         /// <summary>
-        ///   Handles the message.
+        ///     Handles the message.
         /// </summary>
-        /// <param name = "message">The message.</param>
+        /// <param name="message">The message.</param>
         void Handle(TMessage message);
     }
 
     /// <summary>
-    ///   Enables loosely-coupled publication of and subscription to events.
+    ///     Enables loosely-coupled publication of and subscription to events.
     /// </summary>
-    public interface IEventAggregator {
+    public interface IEventAggregator
+    {
         /// <summary>
-        ///   Gets or sets the default publication thread marshaller.
+        ///     Gets or sets the default publication thread marshaller.
         /// </summary>
         /// <value>
-        ///   The default publication thread marshaller.
+        ///     The default publication thread marshaller.
         /// </value>
-        Action<System.Action> PublicationThreadMarshaller { get; set; }
+        Action<Action> PublicationThreadMarshaller { get; set; }
 
         /// <summary>
-        /// Searches the subscribed handlers to check if we have a handler for
-        /// the message type supplied.
+        ///     Searches the subscribed handlers to check if we have a handler for
+        ///     the message type supplied.
         /// </summary>
         /// <param name="messageType">The message type to check with</param>
         /// <returns>True if any handler is found, false if not.</returns>
         bool HandlerExistsFor(Type messageType);
 
         /// <summary>
-        ///   Subscribes an instance to all events declared through implementations of <see cref = "IHandle{T}" />
+        ///     Subscribes an instance to all events declared through implementations of <see cref="IHandle{T}" />
         /// </summary>
-        /// <param name = "subscriber">The instance to subscribe for event publication.</param>
+        /// <param name="subscriber">The instance to subscribe for event publication.</param>
         void Subscribe(object subscriber);
 
         /// <summary>
-        ///   Unsubscribes the instance from all events.
+        ///     Unsubscribes the instance from all events.
         /// </summary>
-        /// <param name = "subscriber">The instance to unsubscribe.</param>
+        /// <param name="subscriber">The instance to unsubscribe.</param>
         void Unsubscribe(object subscriber);
 
         /// <summary>
-        ///   Publishes a message.
+        ///     Publishes a message.
         /// </summary>
-        /// <param name = "message">The message instance.</param>
+        /// <param name="message">The message instance.</param>
         /// <remarks>
-        ///   Uses the default thread marshaller during publication.
+        ///     Uses the default thread marshaller during publication.
         /// </remarks>
         void Publish(object message);
 
         /// <summary>
-        ///   Publishes a message.
+        ///     Publishes a message.
         /// </summary>
-        /// <param name = "message">The message instance.</param>
-        /// <param name = "marshal">Allows the publisher to provide a custom thread marshaller for the message publication.</param>
-        void Publish(object message, Action<System.Action> marshal);
+        /// <param name="message">The message instance.</param>
+        /// <param name="marshal">Allows the publisher to provide a custom thread marshaller for the message publication.</param>
+        void Publish(object message, Action<Action> marshal);
     }
 
     /// <summary>
-    ///   Enables loosely-coupled publication of and subscription to events.
+    ///     Enables loosely-coupled publication of and subscription to events.
     /// </summary>
-    public class EventAggregator : IEventAggregator {
-        readonly List<Handler> handlers = new List<Handler>();
-
+    public class EventAggregator : IEventAggregator
+    {
         /// <summary>
-        ///   The default thread marshaller used for publication;
+        ///     The default thread marshaller used for publication;
         /// </summary>
-        public static Action<System.Action> DefaultPublicationThreadMarshaller = action => action();
+        public static Action<Action> DefaultPublicationThreadMarshaller = action => action();
 
         /// <summary>
-        /// Processing of handler results on publication thread.
+        ///     Processing of handler results on publication thread.
         /// </summary>
         public static Action<object, object> HandlerResultProcessing = (target, result) => { };
 
+        private readonly List<Handler> handlers = new List<Handler>();
+
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "EventAggregator" /> class.
+        ///     Initializes a new instance of the <see cref="EventAggregator" /> class.
         /// </summary>
-        public EventAggregator() {
+        public EventAggregator()
+        {
             PublicationThreadMarshaller = DefaultPublicationThreadMarshaller;
         }
 
         /// <summary>
-        ///   Gets or sets the default publication thread marshaller.
+        ///     Gets or sets the default publication thread marshaller.
         /// </summary>
         /// <value>
-        ///   The default publication thread marshaller.
+        ///     The default publication thread marshaller.
         /// </value>
-        public Action<System.Action> PublicationThreadMarshaller { get; set; }
+        public Action<Action> PublicationThreadMarshaller { get; set; }
 
         /// <summary>
-        /// Searches the subscribed handlers to check if we have a handler for
-        /// the message type supplied.
+        ///     Searches the subscribed handlers to check if we have a handler for
+        ///     the message type supplied.
         /// </summary>
         /// <param name="messageType">The message type to check with</param>
         /// <returns>True if any handler is found, false if not.</returns>
-        public bool HandlerExistsFor(Type messageType) {
-                return handlers.Any(handler => handler.Handles(messageType) & !handler.IsDead);
+        public bool HandlerExistsFor(Type messageType)
+        {
+            return handlers.Any(handler => handler.Handles(messageType) & !handler.IsDead);
         }
 
         /// <summary>
-        ///   Subscribes an instance to all events declared through implementations of <see cref = "IHandle{T}" />
+        ///     Subscribes an instance to all events declared through implementations of <see cref="IHandle{T}" />
         /// </summary>
-        /// <param name = "subscriber">The instance to subscribe for event publication.</param>
-        public virtual void Subscribe(object subscriber) {
-            if (subscriber == null) {
-                throw new ArgumentNullException("subscriber");
-            }
-            lock(handlers) {
-                if (handlers.Any(x => x.Matches(subscriber))) {
-                    return;
-                }
+        /// <param name="subscriber">The instance to subscribe for event publication.</param>
+        public virtual void Subscribe(object subscriber)
+        {
+            if (subscriber == null) throw new ArgumentNullException("subscriber");
+            lock (handlers)
+            {
+                if (handlers.Any(x => x.Matches(subscriber))) return;
 
                 handlers.Add(new Handler(subscriber));
             }
         }
 
         /// <summary>
-        ///   Unsubscribes the instance from all events.
+        ///     Unsubscribes the instance from all events.
         /// </summary>
-        /// <param name = "subscriber">The instance to unsubscribe.</param>
-        public virtual void Unsubscribe(object subscriber) {
-            if (subscriber == null) {
-                throw new ArgumentNullException("subscriber");
-            }
-            lock(handlers) {
+        /// <param name="subscriber">The instance to unsubscribe.</param>
+        public virtual void Unsubscribe(object subscriber)
+        {
+            if (subscriber == null) throw new ArgumentNullException("subscriber");
+            lock (handlers)
+            {
                 var found = handlers.FirstOrDefault(x => x.Matches(subscriber));
 
-                if (found != null) {
-                    handlers.Remove(found);
-                }
+                if (found != null) handlers.Remove(found);
             }
         }
 
         /// <summary>
-        ///   Publishes a message.
+        ///     Publishes a message.
         /// </summary>
-        /// <param name = "message">The message instance.</param>
+        /// <param name="message">The message instance.</param>
         /// <remarks>
-        ///   Does not marshall the the publication to any special thread by default.
+        ///     Does not marshall the the publication to any special thread by default.
         /// </remarks>
-        public virtual void Publish(object message) {
-            if (message == null) {
-                throw new ArgumentNullException("message");
-            }
+        public virtual void Publish(object message)
+        {
+            if (message == null) throw new ArgumentNullException("message");
             Publish(message, PublicationThreadMarshaller);
         }
 
         /// <summary>
-        ///   Publishes a message.
+        ///     Publishes a message.
         /// </summary>
-        /// <param name = "message">The message instance.</param>
-        /// <param name = "marshal">Allows the publisher to provide a custom thread marshaller for the message publication.</param>
-        public virtual void Publish(object message, Action<System.Action> marshal) {
-            if (message == null){
-                throw new ArgumentNullException("message");
-            }
-            if (marshal == null) {
-                throw new ArgumentNullException("marshal");
-            }
+        /// <param name="message">The message instance.</param>
+        /// <param name="marshal">Allows the publisher to provide a custom thread marshaller for the message publication.</param>
+        public virtual void Publish(object message, Action<Action> marshal)
+        {
+            if (message == null) throw new ArgumentNullException("message");
+            if (marshal == null) throw new ArgumentNullException("marshal");
 
             Handler[] toNotify;
-            lock (handlers) {
+            lock (handlers)
+            {
                 toNotify = handlers.ToArray();
             }
 
-            marshal(() => {
+            marshal(() =>
+            {
                 var messageType = message.GetType();
 
                 var dead = toNotify
                     .Where(handler => !handler.Handle(messageType, message))
                     .ToList();
 
-                if(dead.Any()) {
-                    lock(handlers) {
+                if (dead.Any())
+                    lock (handlers)
+                    {
                         dead.Apply(x => handlers.Remove(x));
                     }
-                }
             });
         }
 
-        class Handler {
-            readonly WeakReference reference;
-            readonly Dictionary<Type, MethodInfo> supportedHandlers = new Dictionary<Type, MethodInfo>();
+        private class Handler
+        {
+            private readonly WeakReference reference;
+            private readonly Dictionary<Type, MethodInfo> supportedHandlers = new Dictionary<Type, MethodInfo>();
 
-            public bool IsDead {
-                get { return reference.Target == null; }
-            }
-
-            public Handler(object handler) {
+            public Handler(object handler)
+            {
                 reference = new WeakReference(handler);
 
 #if WinRT
@@ -221,7 +221,8 @@ namespace Chessington.UI.Caliburn.Micro {
                 var interfaces = handler.GetType().GetInterfaces()
                     .Where(x => typeof(IHandle).IsAssignableFrom(x) && x.IsGenericType);
 
-                foreach(var @interface in interfaces) {
+                foreach (var @interface in interfaces)
+                {
                     var type = @interface.GetGenericArguments()[0];
                     var method = @interface.GetMethod("Handle");
                     supportedHandlers[type] = method;
@@ -229,29 +230,30 @@ namespace Chessington.UI.Caliburn.Micro {
 #endif
             }
 
-            public bool Matches(object instance) {
+            public bool IsDead => reference.Target == null;
+
+            public bool Matches(object instance)
+            {
                 return reference.Target == instance;
             }
 
-            public bool Handle(Type messageType, object message) {
+            public bool Handle(Type messageType, object message)
+            {
                 var target = reference.Target;
-                if (target == null) {
-                    return false;
-                }
+                if (target == null) return false;
 
-                foreach(var pair in supportedHandlers) {
-                    if(pair.Key.IsAssignableFrom(messageType)) {
-                        var result = pair.Value.Invoke(target, new[] { message });
-                        if (result != null) {
-                            HandlerResultProcessing(target, result);
-                        }
+                foreach (var pair in supportedHandlers)
+                    if (pair.Key.IsAssignableFrom(messageType))
+                    {
+                        var result = pair.Value.Invoke(target, new[] {message});
+                        if (result != null) HandlerResultProcessing(target, result);
                     }
-                }
-                
+
                 return true;
             }
 
-            public bool Handles(Type messageType) {
+            public bool Handles(Type messageType)
+            {
                 return supportedHandlers.Any(pair => pair.Key.IsAssignableFrom(messageType));
             }
         }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using Chessington.GameEngine;
 using Chessington.GameEngine.Pieces;
 using Chessington.UI.Caliburn.Micro;
@@ -20,13 +18,8 @@ namespace Chessington.UI.ViewModels
             Board.CurrentPlayerChanged += BoardOnCurrentPlayerChanged;
             ChessingtonServices.EventAggregator.Subscribe(this);
         }
-        
-        public Board Board { get; private set; }
 
-        public void PiecesMoved()
-        {
-            ChessingtonServices.EventAggregator.Publish(new PiecesMoved(Board));
-        }
+        public Board Board { get; }
 
         public void Handle(PieceSelected message)
         {
@@ -59,10 +52,15 @@ namespace Chessington.UI.ViewModels
             if (moves.Contains(message.Square))
             {
                 currentPiece.MoveTo(Board, message.Square);
-                
+
                 ChessingtonServices.EventAggregator.Publish(new PiecesMoved(Board));
                 ChessingtonServices.EventAggregator.Publish(new SelectionCleared());
             }
+        }
+
+        public void PiecesMoved()
+        {
+            ChessingtonServices.EventAggregator.Publish(new PiecesMoved(Board));
         }
 
         private static void BoardOnPieceCaptured(Piece piece)

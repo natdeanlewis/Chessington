@@ -5,7 +5,7 @@ using Chessington.UI.ViewModels;
 namespace Chessington.UI
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -13,11 +13,11 @@ namespace Chessington.UI
         {
             InitializeComponent();
             DataContext = new GameViewModel();
-            
+
             var boardViewModel = new BoardViewModel();
             StartingPositionFactory.Setup(boardViewModel.Board);
             BoardViewFactory.CreateBoardView(boardViewModel, GridContainer);
-            
+
             boardViewModel.PiecesMoved();
         }
     }

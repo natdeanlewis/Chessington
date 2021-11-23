@@ -24,7 +24,7 @@
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is Square && Equals((Square)obj);
+            return obj is Square && Equals((Square) obj);
         }
 
         public override int GetHashCode()

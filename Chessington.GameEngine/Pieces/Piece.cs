@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace Chessington.GameEngine.Pieces
 {
     public abstract class Piece
     {
+        public bool hasMoved = false;
+
         protected Piece(Player player)
         {
             Player = player;
         }
 
-        public Player Player { get; private set; }
+        public Player Player { get; }
 
         public abstract IEnumerable<Square> GetAvailableMoves(Board board);
 

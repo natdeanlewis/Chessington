@@ -9,6 +9,6 @@ namespace Chessington.UI.Notifications
             Player = player;
         }
 
-        public Player Player { get; private set; }
+        public Player Player { get; }
     }
 }

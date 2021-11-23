@@ -4,7 +4,7 @@ using Chessington.GameEngine.Pieces;
 namespace Chessington.UI.Factories
 {
     /// <summary>
-    /// Owns the logic of how to set up a chess board.
+    ///     Owns the logic of how to set up a chess board.
     /// </summary>
     public static class StartingPositionFactory
     {

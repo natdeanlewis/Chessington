@@ -1,25 +1,33 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace Chessington.GameEngine.Pieces
 {
     public class Pawn : Piece
     {
-        public Pawn(Player player) 
-            : base(player) { }
+
+        public Pawn(Player player)
+            : base(player)
+        {
+        }
 
         public override IEnumerable<Square> GetAvailableMoves(Board board)
         {
             var currentSquare = board.FindPiece(this);
 
-            List<Square> availableMoves = new List<Square>();
+            var availableMoves = new List<Square>();
+            var row = currentSquare.Row;
+            var col = currentSquare.Col;
             if (Player == Player.White)
             {
-                availableMoves.Add(Square.At(currentSquare.Row-1, currentSquare.Col));
+                availableMoves.Add(Square.At(row - 1, col));
+                if (!hasMoved) availableMoves.Add(Square.At(row - 2, col));
+            }
+            else
+            {
+                availableMoves.Add(Square.At(row + 1, col));
+                if (!hasMoved) availableMoves.Add(Square.At(row + 2, col));
+            }
 
-            } availableMoves.Add(Square.At(currentSquare.Row+1, currentSquare.Col));
             return availableMoves;
         }
     }

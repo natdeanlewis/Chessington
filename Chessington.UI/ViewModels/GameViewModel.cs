@@ -22,11 +22,11 @@ namespace Chessington.UI.ViewModels
             CurrentPlayer = Enum.GetName(typeof(Player), Player.White);
         }
 
-        public ObservableCollection<BitmapImage> CapturedPieces { get; private set; }
+        public ObservableCollection<BitmapImage> CapturedPieces { get; }
 
         public string CurrentPlayer
         {
-            get { return currentPlayer; }
+            get => currentPlayer;
             private set
             {
                 if (value == currentPlayer) return;
@@ -35,14 +35,14 @@ namespace Chessington.UI.ViewModels
             }
         }
 
-        public void Handle(PieceTaken message)
-        {
-            CapturedPieces.Add(PieceImageFactory.GetImage(message.Piece));
-        }
-
         public void Handle(CurrentPlayerChanged message)
         {
             CurrentPlayer = Enum.GetName(typeof(Player), message.Player);
+        }
+
+        public void Handle(PieceTaken message)
+        {
+            CapturedPieces.Add(PieceImageFactory.GetImage(message.Piece));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

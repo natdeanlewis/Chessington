@@ -4,18 +4,17 @@
         Title="MainWindow" Height="525" Width="525">
     <StackPanel Orientation="Horizontal">
         <Border BorderBrush="#FFC7A13B" BorderThickness="2" CornerRadius="1">
-            <StackPanel x:Name="GridContainer" HorizontalAlignment="Center" VerticalAlignment="Center">
-            </StackPanel>
+            <StackPanel x:Name="GridContainer" HorizontalAlignment="Center" VerticalAlignment="Center" />
         </Border>
         <StackPanel Orientation="Vertical">
             <TextBlock Text="{Binding CurrentPlayer}" FontWeight="Bold" FontSize="14" />
-        <ListView ItemsSource="{Binding CapturedPieces}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Image Source="{Binding}" Width="40" Height="40"></Image>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            <ListView ItemsSource="{Binding CapturedPieces}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding}" Width="40" Height="40" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
     </StackPanel>
 </Window>

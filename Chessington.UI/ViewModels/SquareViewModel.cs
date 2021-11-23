@@ -10,30 +10,30 @@ using Chessington.UI.Properties;
 
 namespace Chessington.UI.ViewModels
 {
-    public class SquareViewModel : INotifyPropertyChanged, 
-        IHandle<PiecesMoved>, 
-        IHandle<PieceSelected>, 
-        IHandle<ValidMovesUpdated>, 
+    public class SquareViewModel : INotifyPropertyChanged,
+        IHandle<PiecesMoved>,
+        IHandle<PieceSelected>,
+        IHandle<ValidMovesUpdated>,
         IHandle<SelectionCleared>
     {
-        private readonly Square square;
+        private BitmapImage image;
 
         private bool selected;
         private bool validMovementTarget;
-        private BitmapImage image;
 
         public SquareViewModel(Square square)
         {
-            this.square = square;
+            this.Location = square;
             ChessingtonServices.EventAggregator.Subscribe(this);
         }
 
-        public Square Location { get { return square; } }
-        public SquareViewModel Self { get { return this; } }
+        public Square Location { get; }
+
+        public SquareViewModel Self => this;
 
         public bool Selected
         {
-            get { return selected; }
+            get => selected;
             set
             {
                 if (value.Equals(selected)) return;
@@ -45,7 +45,7 @@ namespace Chessington.UI.ViewModels
 
         public bool ValidMovementTarget
         {
-            get { return validMovementTarget; }
+            get => validMovementTarget;
             set
             {
                 if (value.Equals(validMovementTarget)) return;
@@ -57,7 +57,7 @@ namespace Chessington.UI.ViewModels
 
         public BitmapImage Image
         {
-            get { return image; }
+            get => image;
             set
             {
                 if (Equals(value, image)) return;
@@ -69,12 +69,12 @@ namespace Chessington.UI.ViewModels
 
         public void Handle(PieceSelected notification)
         {
-            Selected = notification.Square.Equals(square);
+            Selected = notification.Square.Equals(Location);
         }
 
         public void Handle(PiecesMoved notification)
         {
-            var currentPiece = notification.Board.GetPiece(square);
+            var currentPiece = notification.Board.GetPiece(Location);
 
             if (currentPiece == null)
             {
@@ -85,15 +85,15 @@ namespace Chessington.UI.ViewModels
             Image = PieceImageFactory.GetImage(currentPiece);
         }
 
-        public void Handle(ValidMovesUpdated message)
-        {
-            ValidMovementTarget = message.Moves.Contains(square);
-        }
-        
         public void Handle(SelectionCleared message)
         {
             Selected = false;
             ValidMovementTarget = false;
+        }
+
+        public void Handle(ValidMovesUpdated message)
+        {
+            ValidMovementTarget = message.Moves.Contains(Location);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -101,7 +101,7 @@ namespace Chessington.UI.ViewModels
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
+            var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }

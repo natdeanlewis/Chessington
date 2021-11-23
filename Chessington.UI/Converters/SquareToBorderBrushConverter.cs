@@ -7,7 +7,7 @@ using Chessington.UI.ViewModels;
 namespace Chessington.UI.Converters
 {
     /// <summary>
-    /// Given a ChessSquare object, returns a Brush which can be used to colour that square's border.
+    ///     Given a ChessSquare object, returns a Brush which can be used to colour that square's border.
     /// </summary>
     public class SquareToBorderBrushConverter : IValueConverter
     {
