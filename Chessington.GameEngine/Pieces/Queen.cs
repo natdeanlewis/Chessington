@@ -18,23 +18,61 @@ namespace Chessington.GameEngine.Pieces
             var row = currentSquare.Row;
             var col = currentSquare.Col;
             
-            for (var i = 0; i < 8; i++)
+            for (var i = 1; i <= 7; i++)
             {
-                availableMoves.Add(Square.At(row, i));
-                availableMoves.Add(Square.At(i, col));
-                int y1 = col - row + i;
-                if (0 <= y1 && y1 <= 7)
+                if (Square.At(row + i, col + i).IsInBounds() && board.GetPiece(Square.At(row + i, col + i)) == null)
                 {
-                    availableMoves.Add(Square.At(i, y1));
-
+                    availableMoves.Add(Square.At(row + i, col + i));
                 }
-                int y2 = 8 - i + row - col;
-                if (0 <= y2 && y2 <= 7)
-                {
-                    availableMoves.Add(Square.At(i, y2));
-                }
-
+                else break;
             }
+            
+            for (var i = 1; i <= 7; i++)
+            {
+                if (Square.At(row + i, col - i).IsInBounds() && board.GetPiece(Square.At(row + i, col - i)) == null)
+                {
+                    availableMoves.Add(Square.At(row + i, col - i));
+                }
+                else break;
+            }
+            
+            for (var i = 1; i <= 7; i++)
+            {
+                if (Square.At(row - i, col + i).IsInBounds() && board.GetPiece(Square.At(row - i, col + i)) == null)
+                {
+                    availableMoves.Add(Square.At(row - i, col + i));
+                }
+                else break;
+            }
+            
+            for (var i = 1; i <= 7; i++)
+            {
+                if (Square.At(row - i, col - i).IsInBounds() && board.GetPiece(Square.At(row - i, col - i)) == null)
+                {
+                    availableMoves.Add(Square.At(row - i, col - i));
+                }
+                else break;
+            }
+            
+            for (var i = 1; i <= 7; i++)
+                if (col + i <= 7 && board.GetPiece(Square.At(row, col + i)) == null)
+                    availableMoves.Add(Square.At(row, col + i));
+                else break;
+
+            for (var i = 1; i <= 7; i++)
+                if (col - i >= 0 && board.GetPiece(Square.At(row, col - i)) == null)
+                    availableMoves.Add(Square.At(row, col - i));
+                else break;
+
+            for (var i = 1; i <= 7; i++)
+                if (row + i <= 7 && board.GetPiece(Square.At(row + i, col)) == null)
+                    availableMoves.Add(Square.At(row + i, col));
+                else break;
+            
+            for (var i = 1; i <= 7; i++)
+                if (row - i >= 0 && board.GetPiece(Square.At(row - i, col)) == null)
+                    availableMoves.Add(Square.At(row - i, col));
+                else break;
             
             availableMoves.RemoveAll(s => s == Square.At(row, col));
             return availableMoves;
