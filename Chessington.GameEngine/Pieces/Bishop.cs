@@ -21,38 +21,68 @@ namespace Chessington.GameEngine.Pieces
             var col = currentSquare.Col;
             
 
+            Square square;
+            Piece piece;
+
             for (var i = 1; i <= 7; i++)
             {
-                if (Square.At(row + i, col + i).IsInBounds() && board.GetPiece(Square.At(row + i, col + i)) == null)
+                square = Square.At(row + i, col + i);
+                if (!square.IsInBounds())
+                    break;
+                piece = board.GetPiece(square);
+                if (piece == null)
+                    availableMoves.Add(square);
+                else if (piece.IsOpponents(Player))
                 {
-                    availableMoves.Add(Square.At(row + i, col + i));
+                    availableMoves.Add(square);
+                    break;
                 }
                 else break;
             }
             
             for (var i = 1; i <= 7; i++)
             {
-                if (Square.At(row + i, col - i).IsInBounds() && board.GetPiece(Square.At(row + i, col - i)) == null)
+                square = Square.At(row + i, col - i);
+                if (!square.IsInBounds())
+                    break;
+                piece = board.GetPiece(square);
+                if (piece == null)
+                    availableMoves.Add(square);
+                else if (piece.IsOpponents(Player))
                 {
-                    availableMoves.Add(Square.At(row + i, col - i));
+                    availableMoves.Add(square);
+                    break;
                 }
                 else break;
-            }
-            
-            for (var i = 1; i <= 7; i++)
+                
+            }for (var i = 1; i <= 7; i++)
             {
-                if (Square.At(row - i, col + i).IsInBounds() && board.GetPiece(Square.At(row - i, col + i)) == null)
+                square = Square.At(row - i, col + i);
+                if (!square.IsInBounds())
+                    break;
+                piece = board.GetPiece(square);
+                if (piece == null)
+                    availableMoves.Add(square);
+                else if (piece.IsOpponents(Player))
                 {
-                    availableMoves.Add(Square.At(row - i, col + i));
+                    availableMoves.Add(square);
+                    break;
                 }
                 else break;
+                
             }
-            
             for (var i = 1; i <= 7; i++)
             {
-                if (Square.At(row - i, col - i).IsInBounds() && board.GetPiece(Square.At(row - i, col - i)) == null)
+                square = Square.At(row - i, col - i);
+                if (!square.IsInBounds())
+                    break;
+                piece = board.GetPiece(square);
+                if (piece == null)
+                    availableMoves.Add(square);
+                else if (piece.IsOpponents(Player))
                 {
-                    availableMoves.Add(Square.At(row - i, col - i));
+                    availableMoves.Add(square);
+                    break;
                 }
                 else break;
             }
