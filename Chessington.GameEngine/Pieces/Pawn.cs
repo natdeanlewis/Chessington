@@ -15,7 +15,11 @@ namespace Chessington.GameEngine.Pieces
             var currentSquare = board.FindPiece(this);
 
             List<Square> availableMoves = new List<Square>();
-            availableMoves.Add(Square.At(currentSquare.Row+1, currentSquare.Col));
+            if (Player == Player.White)
+            {
+                availableMoves.Add(Square.At(currentSquare.Row-1, currentSquare.Col));
+
+            } availableMoves.Add(Square.At(currentSquare.Row+1, currentSquare.Col));
             return availableMoves;
         }
     }
