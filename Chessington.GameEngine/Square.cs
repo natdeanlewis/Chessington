@@ -1,4 +1,6 @@
-﻿namespace Chessington.GameEngine
+﻿using System;
+
+namespace Chessington.GameEngine
 {
     public struct Square
     {
@@ -49,5 +51,10 @@
         {
             return string.Format("Row {0}, Col {1}", Row, Col);
         }
+        public Boolean IsInBounds()
+        {
+            return (Math.Min(Col, Row) >= 0 && Math.Max(Col, Row) <= 7);
+        }
+        
     }
 }

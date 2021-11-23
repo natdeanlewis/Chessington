@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Win32.SafeHandles;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -18,24 +20,44 @@ namespace Chessington.GameEngine.Pieces
             var row = currentSquare.Row;
             var col = currentSquare.Col;
             
-            for (var i = 0; i < 8; i++)
+
+            for (var i = 1; i <= 7; i++)
             {
-       
-                int y1 = col - row + i;
-                if (0 <= y1 && y1 <= 7)
+                if (Square.At(row + i, col + i).IsInBounds() && board.GetPiece(Square.At(row + i, col + i)) == null)
                 {
-                    availableMoves.Add(Square.At(i, y1));
-
+                    availableMoves.Add(Square.At(row + i, col + i));
                 }
-                int y2 = 8 - i + row - col;
-                if (0 <= y2 && y2 <= 7)
-                {
-                    availableMoves.Add(Square.At(i, y2));
-                }
-
+                else break;
             }
             
-            availableMoves.RemoveAll(s => s == Square.At(row, col));
-            return availableMoves;        }
+            for (var i = 1; i <= 7; i++)
+            {
+                if (Square.At(row + i, col - i).IsInBounds() && board.GetPiece(Square.At(row + i, col - i)) == null)
+                {
+                    availableMoves.Add(Square.At(row + i, col - i));
+                }
+                else break;
+            }
+            
+            for (var i = 1; i <= 7; i++)
+            {
+                if (Square.At(row - i, col + i).IsInBounds() && board.GetPiece(Square.At(row - i, col + i)) == null)
+                {
+                    availableMoves.Add(Square.At(row - i, col + i));
+                }
+                else break;
+            }
+            
+            for (var i = 1; i <= 7; i++)
+            {
+                if (Square.At(row - i, col - i).IsInBounds() && board.GetPiece(Square.At(row - i, col - i)) == null)
+                {
+                    availableMoves.Add(Square.At(row - i, col - i));
+                }
+                else break;
+            }
+
+            return availableMoves;        
+        }
     }
 }
