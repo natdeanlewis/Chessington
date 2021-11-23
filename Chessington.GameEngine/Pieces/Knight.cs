@@ -28,14 +28,22 @@ namespace Chessington.GameEngine.Pieces
             // availableMoves.Add(Square.At(row + 2, col - 1));
             // availableMoves.Add(Square.At(row - 2, col - 1));
 
-            for (int i = 0; i < 2; i++)
+            Square square;
+            Piece piece;
+            
+            for (var i = 0; i < 2; i++)
             {
                 for (int j = 0; j < 2; j++)
                 {
                     for (int k = 0; k < 2; k++)
                     {
-                        var sq = Square.At(row + (2 * j - 1) * (2 - i), col + (2 * k - 1) * (i + 1));
-                        if (sq.IsInBounds()) availableMoves.Add(sq);
+                        square = Square.At(row + (2 * j - 1) * (2 - i), col + (2 * k - 1) * (i + 1));
+                        if (square.IsInBounds())
+                        {
+                            piece = board.GetPiece(square);
+
+                            if (piece == null || piece.IsOpponents(Player)) availableMoves.Add(square);
+                        }
                     }
                 }
             }
