@@ -21,7 +21,11 @@ namespace Chessington.GameEngine.Pieces
             {
                 for (var j = -1; j <= 1; j++)
                 {
-                    availableMoves.Add(Square.At(row + i, col + j));
+                    
+                    if(Square.At(row + i, col + j).IsInBounds())
+                    {
+                        availableMoves.Add(Square.At(row + i, col + j));
+                    }
                 }
             }
             

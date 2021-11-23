@@ -32,7 +32,7 @@ namespace Chessington.GameEngine.Pieces
                 twoAhead = Square.At(row + 2, col);
             }
 
-            if (board.GetPiece(oneAhead) == null)
+            if (oneAhead.IsInBounds() && board.GetPiece(oneAhead) == null)
             {
                 availableMoves.Add(oneAhead);
                 

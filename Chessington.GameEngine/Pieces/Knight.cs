@@ -34,7 +34,8 @@ namespace Chessington.GameEngine.Pieces
                 {
                     for (int k = 0; k < 2; k++)
                     {
-                        availableMoves.Add(Square.At(row + (2 * j - 1) * (2 - i), col + (2 * k - 1) * (i + 1)));
+                        var sq = Square.At(row + (2 * j - 1) * (2 - i), col + (2 * k - 1) * (i + 1));
+                        if (sq.IsInBounds()) availableMoves.Add(sq);
                     }
                 }
             }
