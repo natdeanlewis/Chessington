@@ -17,14 +17,20 @@ namespace Chessington.GameEngine.Pieces
             var availableMoves = new List<Square>();
             var row = currentSquare.Row;
             var col = currentSquare.Col;
+            
+            Square square;
+            Piece piece;
+            
             for (var i = -1; i <= 1; i++)
             {
                 for (var j = -1; j <= 1; j++)
                 {
-                    
-                    if(Square.At(row + i, col + j).IsInBounds())
+                    square = Square.At(row + i, col + j);
+                    if (square.IsInBounds())
                     {
-                        availableMoves.Add(Square.At(row + i, col + j));
+                        piece = board.GetPiece(square);
+
+                        if (piece == null || piece.IsOpponents(Player)) availableMoves.Add(square);
                     }
                 }
             }
