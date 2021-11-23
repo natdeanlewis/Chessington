@@ -4,7 +4,6 @@ namespace Chessington.GameEngine.Pieces
 {
     public class Pawn : Piece
     {
-
         public Pawn(Player player)
             : base(player)
         {

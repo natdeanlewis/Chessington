@@ -23,7 +23,7 @@ namespace Chessington.UI.ViewModels
 
         public SquareViewModel(Square square)
         {
-            this.Location = square;
+            Location = square;
             ChessingtonServices.EventAggregator.Subscribe(this);
         }
 
