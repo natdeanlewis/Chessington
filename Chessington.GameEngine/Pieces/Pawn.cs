@@ -16,17 +16,30 @@ namespace Chessington.GameEngine.Pieces
             var availableMoves = new List<Square>();
             var row = currentSquare.Row;
             var col = currentSquare.Col;
+
+            Square oneAhead;
+            Square twoAhead;
+            
             if (Player == Player.White)
             {
-                availableMoves.Add(Square.At(row - 1, col));
-                if (!hasMoved) availableMoves.Add(Square.At(row - 2, col));
+                oneAhead = Square.At(row - 1, col);
+                twoAhead = Square.At(row - 2, col);
+                
             }
             else
             {
-                availableMoves.Add(Square.At(row + 1, col));
-                if (!hasMoved) availableMoves.Add(Square.At(row + 2, col));
+                oneAhead = Square.At(row + 1, col);
+                twoAhead = Square.At(row + 2, col);
             }
 
+            if (board.GetPiece(oneAhead) == null)
+            {
+                availableMoves.Add(oneAhead);
+                
+                if (!hasMoved && board.GetPiece(twoAhead) == null) availableMoves.Add(twoAhead);
+            }
+
+            
             return availableMoves;
         }
     }
