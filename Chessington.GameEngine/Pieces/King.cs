@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -18,27 +18,22 @@ namespace Chessington.GameEngine.Pieces
             var row = currentSquare.Row;
             var col = currentSquare.Col;
             
-            Square square;
-            Piece piece;
-            
-            for (var i = -1; i <= 1; i++)
-            {
-                for (var j = -1; j <= 1; j++)
-                {
-                    square = Square.At(row + i, col + j);
-                    if (square.IsInBounds())
-                    {
-                        piece = board.GetPiece(square);
+            var range = 1;
+            var directions = new List<Tuple<int, int>>();
 
-                        if (piece == null || piece.IsOpponents(Player)) availableMoves.Add(square);
-                    }
-                }
-            }
-            
-            
+            directions.Add(new Tuple<int, int>(1, 0));
+            directions.Add(new Tuple<int, int>(0, 1));
+            directions.Add(new Tuple<int, int>(-1, 0));
+            directions.Add(new Tuple<int, int>(0, -1));
+            directions.Add(new Tuple<int, int>(1, 1));
+            directions.Add(new Tuple<int, int>(1, -1));
+            directions.Add(new Tuple<int, int>(-1, 1));
+            directions.Add(new Tuple<int, int>(-1, -1));
 
-            availableMoves.RemoveAll(s => s == Square.At(row, col));
-            return availableMoves;        
+            foreach (var direction in directions)
+                availableMoves = iterativeMoveCheck(row, col, availableMoves, board, direction, range);
+
+            return availableMoves;
         }
     }
 }

@@ -21,14 +21,13 @@ namespace Chessington.GameEngine.Pieces
             Square twoAhead;
             Square leftDiagonal;
             Square rightDiagonal;
-            
+
             if (Player == Player.White)
             {
                 oneAhead = Square.At(row - 1, col);
                 twoAhead = Square.At(row - 2, col);
                 leftDiagonal = Square.At(row - 1, col - 1);
                 rightDiagonal = Square.At(row - 1, col + 1);
-
             }
             else
             {
@@ -47,18 +46,11 @@ namespace Chessington.GameEngine.Pieces
 
             if (leftDiagonal.IsInBounds() && board.GetPiece(leftDiagonal) != null &&
                 board.GetPiece(leftDiagonal).IsOpponents(Player))
-            {
                 availableMoves.Add(leftDiagonal);
-            }
             if (rightDiagonal.IsInBounds() && board.GetPiece(rightDiagonal) != null &&
                 board.GetPiece(rightDiagonal).IsOpponents(Player))
-            {
                 availableMoves.Add(rightDiagonal);
-            }
-            
-            
 
-            
             return availableMoves;
         }
     }

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -17,137 +17,22 @@ namespace Chessington.GameEngine.Pieces
             var availableMoves = new List<Square>();
             var row = currentSquare.Row;
             var col = currentSquare.Col;
-            
-            Square square;
-            Piece piece;
 
-            for (var i = 1; i <= 7; i++)
-            {
-                square = Square.At(row, col + i);
-                if (!square.IsInBounds())
-                    break;
-                piece = board.GetPiece(square);
-                if (piece == null)
-                    availableMoves.Add(square);
-                else if (piece.IsOpponents(Player))
-                {
-                    availableMoves.Add(square);
-                    break;
-                }
-                else break;
-            }
-            
-            for (var i = 1; i <= 7; i++)
-            {
-                square = Square.At(row, col - i);
-                if (!square.IsInBounds())
-                    break;
-                piece = board.GetPiece(square);
-                if (piece == null)
-                    availableMoves.Add(square);
-                else if (piece.IsOpponents(Player))
-                {
-                    availableMoves.Add(square);
-                    break;
-                }
-                else break;
-                
-            }for (var i = 1; i <= 7; i++)
-            {
-                square = Square.At(row + i, col);
-                if (!square.IsInBounds())
-                    break;
-                piece = board.GetPiece(square);
-                if (piece == null)
-                    availableMoves.Add(square);
-                else if (piece.IsOpponents(Player))
-                {
-                    availableMoves.Add(square);
-                    break;
-                }
-                else break;
-                
-            }
-            for (var i = 1; i <= 7; i++)
-            {
-                square = Square.At(row - i, col);
-                if (!square.IsInBounds())
-                    break;
-                piece = board.GetPiece(square);
-                if (piece == null)
-                    availableMoves.Add(square);
-                else if (piece.IsOpponents(Player))
-                {
-                    availableMoves.Add(square);
-                    break;
-                }
-                else break;
-            }
-            
-            for (var i = 1; i <= 7; i++)
-            {
-                square = Square.At(row + i, col + i);
-                if (!square.IsInBounds())
-                    break;
-                piece = board.GetPiece(square);
-                if (piece == null)
-                    availableMoves.Add(square);
-                else if (piece.IsOpponents(Player))
-                {
-                    availableMoves.Add(square);
-                    break;
-                }
-                else break;
-            }
-            
-            for (var i = 1; i <= 7; i++)
-            {
-                square = Square.At(row + i, col - i);
-                if (!square.IsInBounds())
-                    break;
-                piece = board.GetPiece(square);
-                if (piece == null)
-                    availableMoves.Add(square);
-                else if (piece.IsOpponents(Player))
-                {
-                    availableMoves.Add(square);
-                    break;
-                }
-                else break;
-                
-            }for (var i = 1; i <= 7; i++)
-            {
-                square = Square.At(row - i, col + i);
-                if (!square.IsInBounds())
-                    break;
-                piece = board.GetPiece(square);
-                if (piece == null)
-                    availableMoves.Add(square);
-                else if (piece.IsOpponents(Player))
-                {
-                    availableMoves.Add(square);
-                    break;
-                }
-                else break;
-                
-            }
-            for (var i = 1; i <= 7; i++)
-            {
-                square = Square.At(row - i, col - i);
-                if (!square.IsInBounds())
-                    break;
-                piece = board.GetPiece(square);
-                if (piece == null)
-                    availableMoves.Add(square);
-                else if (piece.IsOpponents(Player))
-                {
-                    availableMoves.Add(square);
-                    break;
-                }
-                else break;
-            }
-            
-            availableMoves.RemoveAll(s => s == Square.At(row, col));
+            var range = GameSettings.BoardSize - 1;
+            var directions = new List<Tuple<int, int>>();
+
+            directions.Add(new Tuple<int, int>(1, 0));
+            directions.Add(new Tuple<int, int>(0, 1));
+            directions.Add(new Tuple<int, int>(-1, 0));
+            directions.Add(new Tuple<int, int>(0, -1));
+            directions.Add(new Tuple<int, int>(1, 1));
+            directions.Add(new Tuple<int, int>(1, -1));
+            directions.Add(new Tuple<int, int>(-1, 1));
+            directions.Add(new Tuple<int, int>(-1, -1));
+
+            foreach (var direction in directions)
+                availableMoves = iterativeMoveCheck(row, col, availableMoves, board, direction, range);
+
             return availableMoves;
         }
     }

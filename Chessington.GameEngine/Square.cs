@@ -51,11 +51,10 @@ namespace Chessington.GameEngine
         {
             return string.Format("Row {0}, Col {1}", Row, Col);
         }
+
         public bool IsInBounds()
         {
-            return (Math.Min(Col, Row) >= 0 && Math.Max(Col, Row) <= 7);
+            return Math.Min(Col, Row) >= 0 && Math.Max(Col, Row) <= 7;
         }
-
-
     }
 }

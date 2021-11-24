@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace Chessington.GameEngine.Pieces
 {
@@ -30,21 +28,17 @@ namespace Chessington.GameEngine.Pieces
 
             Square square;
             Piece piece;
-            
-            for (var i = 0; i < 2; i++)
-            {
-                for (int j = 0; j < 2; j++)
-                {
-                    for (int k = 0; k < 2; k++)
-                    {
-                        square = Square.At(row + (2 * j - 1) * (2 - i), col + (2 * k - 1) * (i + 1));
-                        if (square.IsInBounds())
-                        {
-                            piece = board.GetPiece(square);
 
-                            if (piece == null || piece.IsOpponents(Player)) availableMoves.Add(square);
-                        }
-                    }
+            for (var i = 0; i < 2; i++)
+            for (var j = 0; j < 2; j++)
+            for (var k = 0; k < 2; k++)
+            {
+                square = Square.At(row + (2 * j - 1) * (2 - i), col + (2 * k - 1) * (i + 1));
+                if (square.IsInBounds())
+                {
+                    piece = board.GetPiece(square);
+
+                    if (piece == null || piece.IsOpponents(Player)) availableMoves.Add(square);
                 }
             }
 
